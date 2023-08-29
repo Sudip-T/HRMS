@@ -1,0 +1,286 @@
+{% extends 'base/core.html' %}
+
+{% load static %}
+
+{% block title %} Employee Details {% endblock title %}
+
+
+{% block bodyclass %} page-id-allemployees {% endblock bodyclass %}
+
+{% block content %}
+<div class="row">
+    <div class="col-2 col4">
+        {% include 'sidebar_partials.html'%}
+    </div>
+    <div class="col-10 col8">
+        <div class="container-fluid page-content">
+            <div class="page-header mb-4">
+                <div class="row">
+                    <div class="col-8">
+                        <h3 class="page-title">Projects</h3>
+                        <ul class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{% url 'index' %}">Dashboard</a></li>
+                            <li class="breadcrumb-item"><a href="{% url 'allprojects' %}">Projects</a></li>
+                            <li class="breadcrumb-item active">Project Details</li>
+                        </ul>
+                    </div>
+                    {% if user.is_authenticated and user.is_superuser %}
+                    <div class="col-4">
+                        <button type="button" class="btn btn-primary add-btn" data-toggle="modal"
+                            data-target="#exampleModal">
+                            <i class="fa fa-plus"></i>Edit Project</button>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-7 col-xl-8">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="project-title">
+                                <h5 class="card-title">{{project.name}}</h5>
+                                {{ project.project_info|linebreaks }}
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title m-b-20">Uploaded files</h5>
+                                <ul class="files-list">
+                                    <li>
+                                        <div class="files-cont">
+                                            <div class="file-type">
+                                                <span class="files-icon"><i class="fa fa-file-pdf-o"></i></span>
+                                            </div>
+                                            <div class="files-info">
+                                                <span class="file-name text-ellipsis"><a href="#">AHA Selfcare Mobile
+                                                        Application
+                                                        Test-Cases.xls</a></span>
+                                                <span class="file-author"><a href="#">John Doe</a></span> <span
+                                                    class="file-date">May 31st at 6:53 PM</span>
+                                                <div class="file-size">Size: 14.8Mb</div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="files-cont">
+                                            <div class="file-type">
+                                                <span class="files-icon"><i class="fa fa-file-pdf-o"></i></span>
+                                            </div>
+                                            <div class="files-info">
+                                                <span class="file-name text-ellipsis"><a href="#">AHA Selfcare Mobile
+                                                        Application
+                                                        Test-Cases.xls</a></span>
+                                                <span class="file-author"><a href="#">Richard Miles</a></span> <span
+                                                    class="file-date">May 31st at 6:53 PM</span>
+                                                <div class="file-size">Size: 14.8Mb</div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="project-task">
+                            <ul class="nav nav-tabs nav-tabs-top nav-justified mb-0">
+                                <li class="nav-item"><a class="nav-link active" href="#all_tasks" data-bs-toggle="tab"
+                                        aria-expanded="true">All Tasks</a></li>
+                                <li class="nav-item"><a class="nav-link" href="#completed_tasks" data-bs-toggle="tab"
+                                        aria-expanded="false">Completed Tasks</a></li>
+                            </ul>
+                            <div class="tab-content">
+                                <div class="tab-pane show active" id="all_tasks">
+                                    <div class="task-wrapper">
+                                        <div class="task-list-container">
+                                            <div class="task-list-body">
+                                                <ul id="task-list">
+                                                    {% for task in project.tasks.all %}
+                                                    <li class="task">
+                                                        <div class="task-container">
+                                                            <span class="task-action-btn task-check">
+                                                                <span
+                                                                    class="action-circle large complete-btn">{{forloop.counter}}</span>
+                                                            </span>
+                                                            <span class="task-label action-icons"
+                                                                contenteditable="true">{{task.task_name}} -
+                                                                {{task.task_status}}</span>
+                                                            <span class="task-action-btn task-btn-right">
+                                                                <a
+                                                                    href="{% url 'delete_object' model_name='Project' id=project.id redirect_url_name='index' %}"><img
+                                                                        src="{% static 'img/delete.png' %}" alt=""
+                                                                        class="action-img"></a>
+                                                                <a href=""><img src="{% static 'img/edit.png' %}" alt=""
+                                                                        class="action-img"></a>
+                                                            </span>
+                                                        </div>
+                                                    </li>
+                                                    {% endfor %}
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="tab-pane" id="completed_tasks">
+                                    <div class="task-wrapper">
+                                        <div class="task-list-container">
+                                            <div class="task-list-body">
+                                                <ul id="task-list">
+                                                    {% for task in project.tasks.all %}
+                                                    {% if task.task_status == "Completed" %}
+                                                    <li class="task">
+                                                        <div class="task-container">
+                                                            <span class="task-action-btn task-check">
+                                                                <span
+                                                                    class="action-circle large complete-btn" style="background: #35BA67 !important;"></span>
+                                                            </span>
+                                                            <span class="task-label action-icons"
+                                                                contenteditable="true">{{task.task_name}}</span>
+                                                        </div>
+                                                    </li>
+                                                    {% endif %}
+                                                    {% endfor %}
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-5 col-xl-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h6 class="card-title m-b-15">Project details</h6>
+                            <table class="table table-striped table-border" style="width: 100%; max-width: 100%;">
+                                <tbody>
+                                    <tr>
+                                        <td>Client :</td>
+                                        <td class="text-end">{{project.client}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Cost:</td>
+                                        {% if user.is_authenticated and user.is_superuser %}
+                                        <td class="text-end">${{project.cost}}</td>
+                                        {% else %}
+                                        <td class="text-end">Private</td>
+                                        {% endif %}
+                                    </tr>
+                                    <tr>
+                                        <td>Total Hours:</td>
+                                        <td class="text-end">{{project.total_hours}} Hours</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Created:</td>
+                                        <td class="text-end">{{project.created_at}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Deadline:</td>
+                                        <td class="text-end">{{project.deadline}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Priority:</td>
+                                        <td class="text-end">{{project.priority}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Created by:</td>
+                                        <td class="text-end">{{project.created_by}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Status:</td>
+                                        <td class="text-end">{{project.status}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="card project-user">
+                        <div class="card-body">
+                            <h6 class="card-title m-b-20"> Team Leaders</h6>
+                            <ul class="list-box">
+                                {% for member in project.team_leader.all %}
+                                <li>
+                                    {% if user.is_authenticated and user.is_superuser %}
+                                    <a href="{% url 'employeedetails' member.id %}">
+                                        <div class="list-item">
+                                            <div class="list-left">
+                                                <span class="avatar"><img alt=""
+                                                        src="{{member.profile_img.url}}"></span>
+                                            </div>
+                                            <div class="list-body">
+
+                                                <div class="clearfix">{{member.full_name}}</div>
+                                                <span class="message-content">{{member.position}}</span>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    {% else %}
+                                    <div class="list-item">
+                                        <div class="list-left">
+                                            <span class="avatar"><img alt=""
+                                                    src="{{member.profile_img.url}}"></span>
+                                        </div>
+                                        <div class="list-body">
+
+                                            <div class="clearfix">{{member.full_name}}</div>
+                                            <span class="message-content">{{member.position}}</span>
+                                        </div>
+                                    </div>
+                                    {% endif %}
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="card project-user">
+                        <div class="card-body">
+                            <h6 class="card-title m-b-20">Project Members</h6>
+                            <ul class="list-box">
+                                {% for member in project.team_members.all %}
+                                <li>
+                                    <a href="{% url 'employeedetails' member.id %}">
+                                        <div class="list-item">
+                                            <div class="list-left">
+                                                <span class="avatar"><img alt=""
+                                                        src="{{member.profile_img.url}}"></span>
+                                            </div>
+                                            <div class="list-body">
+
+                                                <div class="clearfix">{{member.full_name}}</div>
+                                                <span class="message-content">{{member.position}}</span>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </li>{% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div class="modal custom-modal fade show" id="exampleModal" tabindex="-1" role="dialog"
+                aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document" style="max-width: 600px;">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Edit Project</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form method="post" enctype="multipart/form-data" class="ds-flex project-form">
+                                {% csrf_token %}
+                                {{ form.as_p }}
+                                <button type="submit" class="btn btn-secondary" name="createemployee">Submit</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            </div>
+        </div>
+    </div>
+
+    {% endblock content %}

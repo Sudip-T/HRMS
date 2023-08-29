@@ -1,0 +1,106 @@
+<!doctype html>
+{% load static %}
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/fontawesome.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+
+
+    <title>{% block title %} Core {% endblock title %}</title>
+</head>
+
+<body class="{% block bodyclass %} {% endblock bodyclass %}">
+    <header style="margin-bottom: 60px">
+        <div class="header">
+            <div class="page-title-box">
+                {% if request.user.is_authenticated and request.user.is_superuser %}
+                <h3><a href="{% url 'index' %}" style="color: unset;">HRMS</a></h3>
+                {% elif request.user.is_authenticated %}
+                <h3><a href="{% url 'empdashboard' %}" style="color: unset;">HRMS</a></h3>
+                {% endif %}
+            </div>
+
+            <a id="mobile_btn" class="mobile_btn" href="#sidebar"><i class="fa fa-bars"></i></a>
+
+            <ul class="nav user-menu">
+                {% if request.user.is_authenticated %}
+                <li class="nav-item dropdown has-arrow main-drop">
+                    <a href="#" class="dropdown-toggle nav-link" data-bs-toggle="dropdown">
+                        <span class="user-img">
+                            {% if user.employee.profile_img %}
+                            <img src="{{request.user.employee.profile_img.url}}" alt="">
+                            {% else %}
+                            <img src="{% static 'img/user.jpg' %}" alt="">
+                            {% endif %}
+                            <span class="status online"></span></span>
+                            {% if user.employee.is_superuser %}
+                            <span>Admin</span>
+                            {% else %}
+                            <span>User</span>
+                            {% endif %}
+                    </a>
+                </li>
+                <li>
+                    <div class="dropdown">
+                        <button class="dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false">
+                        </button>
+                        <div class="dropdown-menu classList" id="classList" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
+                        </div>
+                    </div>
+                </li>
+                {% else %}
+                <h1>Welcome, {{request.user.employee.full_name}}</h1>
+                {% endif %}
+            </ul>
+
+
+            <div class="dropdown mobile-user-menu">
+                <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i
+                        class="fa fa-ellipsis-v"></i></a>
+                <div class="dropdown-menu dropdown-menu-right">
+                    <a class="dropdown-item" href="profile.html">My Profile</a>
+                    <a class="dropdown-item" href="settings.html">Settings</a>
+                    <a class="dropdown-item" href="index.html">Logout</a>
+                </div>
+            </div>
+
+        </div>
+    </header>
+    {% block content %} {% endblock content %}
+
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.bundle.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.js' %}"></script>
+    <script src="{% static 'js/main.js' %}"></script>
+
+    {% block javascript %}
+    <script>
+        $(document).ready(function () {
+            $(".datepicker").datepicker({
+                minDate: 0,
+            });
+        });
+    </script>
+    {% endblock %}
+
+</body>
+
+</html>

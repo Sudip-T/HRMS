@@ -1,0 +1,503 @@
+{% extends 'base/core.html' %}
+
+{% load static %}
+
+{% block title %} Employee Details {% endblock title %}
+
+
+{% block bodyclass %} page-id-projectdetails {% endblock bodyclass %}
+
+{% block content %}
+<div class="row">
+    <div class="col-2 col4">
+        {% include 'sidebar_partials.html'%}
+    </div>
+    <div class="col-10 col8">
+        <div class="content container-fluid page-content">
+
+            <div class="page-header">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <h3 class="page-title">Profile</h3>
+                        <ul class="breadcrumb mb-4">
+                            <li class="breadcrumb-item"><a href="{% url 'index' %}">Dashboard</a></li>
+                            <li class="breadcrumb-item"><a href="{% url 'allemployees' %}">All Employees</a></li>
+                            <li class="breadcrumb-item active">Profile</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-0">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="profile-view">
+                                <div class="profile-img-wrap">
+                                    <div class="profile-img">
+                                        {% if employee.profile_img %}
+                                        <img src="{{employee.profile_img.url}}" alt="">
+                                        {% else %}
+                                        <img src="{% static 'img/user.jpg' %}" alt="">
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="profile-basic">
+                                    <div class="row">
+                                        <div class="col-md-5">
+                                            <div class="profile-info-left">
+                                                <h3 class="user-name m-t-0 mb-0">{{employee.full_name}}</h3>
+                                                <h6 class="text-muted">{{employee.department}} Team</h6>
+                                                <small class="text-muted">{{employee.position}}</small>
+                                                <div class="staff-id">Employee ID : {{employee.emp_id}}</div>
+                                                <div class="small doj text-muted">Date of Join :
+                                                    {{employee.date_joined}}</div>
+                                                <div class="staff-msg"><a class="btn btn-custom" href="chat.html">Send
+                                                        Message</a></div>
+                                            </div>
+
+                                        </div>
+                                        <div class="col-md-7">
+                                            <ul class="personal-info">
+                                                <li>
+                                                    <div class="title">Phone:</div>
+                                                    <div class="text"><a href="">{{employee.contact}}</a></div>
+                                                </li>
+                                                <li>
+                                                    <div class="title">Email:</div>
+                                                    <div class="text"><a href="">{{employee.email}}</a></div>
+                                                </li>
+                                                <li>
+                                                    <div class="title">Birthday:</div>
+                                                    <div class="text">{{employee.birthday}}</div>
+                                                </li>
+                                                <li>
+                                                    <div class="title">Address:</div>
+                                                    <div class="text">{{employee.address}}</div>
+                                                </li>
+                                                <li>
+                                                    <div class="title">Gender:</div>
+                                                    <div class="text">{{employee.gender}}</div>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="pro-edit"><a class="edit-icon" data-toggle="modal"
+                                        data-target="#exampleModal2"><i class="fa fa-pencil"></i></a></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card tab-box">
+                <div class="row user-tabs">
+                    <div class="col-lg-12 col-md-12 col-sm-12 line-tabs">
+                        <ul class="nav nav-tabs nav-tabs-bottom">
+                            <li class="nav-item"><a href="#emp_profile" data-bs-toggle="tab"
+                                    class="nav-link active">Profile</a>
+                            </li>
+                            <li class="nav-item"><a href="#emp_projects" data-bs-toggle="tab"
+                                    class="nav-link">Projects</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-content">
+
+                <div id="emp_profile" class="pro-overview tab-pane fade show active">
+                    <div class="row">
+                        <div class="col-md-6 d-flex">
+                            <div class="card profile-box flex-fill">
+                                <div class="card-body">
+                                    <h3 class="card-title">Personal Informations <a href="#" class="edit-icon"
+                                            data-toggle="modal" data-target="#exampleModal"><i
+                                                class="fa fa-pencil"></i></a></h3>
+                                    {% if employee.emppersonalinfo %}
+                                    <ul class="personal-info">
+                                        <li>
+                                            <div class="title">Passport No.</div>
+                                            <div class="text">{{employee.emppersonalinfo.passport_number}}</div>
+                                        </li>
+                                        <li>
+                                            <div class="title">Passport Exp Date.</div>
+                                            <div class="text">{{employee.emppersonalinfo.passport_expiry}}</div>
+                                        </li>
+                                        <li>
+                                            <div class="title">Nationality</div>
+                                            <div class="text">{{employee.emppersonalinfo.nationality}}</div>
+                                        </li>
+                                        <li>
+                                            <div class="title">Religion</div>
+                                            <div class="text">{{employee.emppersonalinfo.religion}}</div>
+                                        </li>
+                                        <li>
+                                            <div class="title">Marital status</div>
+                                            <div class="text">{{employee.emppersonalinfo.marital_status}}</div>
+                                        </li>
+                                    </ul>
+                                    {% else %}
+                                    <div class="add-info-icon">
+                                        <a href="" data-toggle="modal" data-target="#exampleModal">
+                                            <img src="{% static 'img/plus.png' %}" alt="">
+                                        </a>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 d-flex">
+                            <div class="card profile-box flex-fill">
+                                <div class="card-body">
+                                    <h3 class="card-title">Emergency Contact <a href="#" class="edit-icon"
+                                            data-bs-toggle="modal" data-bs-target="#emergency_contact_modal"><i
+                                                class="fa fa-pencil"></i></a></h3>
+                                    <h5 class="section-title">Primary</h5>
+                                    <ul class="personal-info">
+                                        <li>
+                                            <div class="title">Name</div>
+                                            <div class="text">John Doe</div>
+                                        </li>
+                                        <li>
+                                            <div class="title">Relationship</div>
+                                            <div class="text">Father</div>
+                                        </li>
+                                        <li>
+                                            <div class="title">Phone </div>
+                                            <div class="text">9876543210, 9876543210</div>
+                                        </li>
+                                    </ul>
+                                    <hr>
+                                    <h5 class="section-title">Secondary</h5>
+                                    <ul class="personal-info">
+                                        <li>
+                                            <div class="title">Name</div>
+                                            <div class="text">Karen Wills</div>
+                                        </li>
+                                        <li>
+                                            <div class="title">Relationship</div>
+                                            <div class="text">Brother</div>
+                                        </li>
+                                        <li>
+                                            <div class="title">Phone </div>
+                                            <div class="text">9876543210, 9876543210</div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 d-flex">
+                            <div class="card profile-box flex-fill">
+                                <div class="card-body">
+                                    <h3 class="card-title">Bank information <a href="#" class="edit-icon"
+                                            data-toggle="modal" data-target="#exampleModal1"><i
+                                                class="fa fa-pencil"></i></a></h3>
+                                    {% if employee.empbankinfo %}
+                                    <ul class="personal-info">
+                                        <li>
+                                            <div class="title">Bank name</div>
+                                            <div class="text">{{ employee.empbankinfo.bank_name }}</div>
+                                        </li>
+                                        <li>
+                                            <div class="title">Bank account No.</div>
+                                            <div class="text">{{ employee.empbankinfo.account_number }}</div>
+                                        </li>
+                                        <li>
+                                            <div class="title">IFSC Code</div>
+                                            <div class="text">{{ employee.empbankinfo.branch_code }}</div>
+                                        </li>
+                                        <li>
+                                            <div class="title">PAN No</div>
+                                            <div class="text">{{ employee.empbankinfo.pan_number }}</div>
+                                        </li>
+                                    </ul>
+                                    {% else %}
+                                    <div class="add-info-icon" style="height: 60%;">
+                                        <a href="" data-toggle="modal" data-target="#exampleModal1">
+                                            <img src="{% static 'img/plus.png' %}" alt="">
+                                        </a>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 d-flex">
+                            <div class="card profile-box flex-fill">
+                                <div class="card-body">
+                                    <h3 class="card-title">Family Informations <a href="#" class="edit-icon"
+                                            data-bs-toggle="modal" data-bs-target="#family_info_modal"><i
+                                                class="fa fa-pencil"></i></a></h3>
+                                    <div class="table-responsive">
+                                        <table class="table table-nowrap">
+                                            <thead>
+                                                <tr>
+                                                    <th>Name</th>
+                                                    <th>Relationship</th>
+                                                    <th>Date of Birth</th>
+                                                    <th>Phone</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>Leo</td>
+                                                    <td>Brother</td>
+                                                    <td>Feb 16th, 2019</td>
+                                                    <td>9876543210</td>
+                                                    <td class="text-end">
+                                                        <div class="dropdown dropdown-action">
+                                                            <a aria-expanded="false" data-bs-toggle="dropdown"
+                                                                class="action-icon dropdown-toggle" href="#"><i
+                                                                    class="material-icons">more_vert</i></a>
+                                                            <div class="dropdown-menu dropdown-menu-right">
+                                                                <a href="#" class="dropdown-item"><i
+                                                                        class="fa fa-pencil m-r-5"></i> Edit</a>
+                                                                <a href="#" class="dropdown-item"><i
+                                                                        class="fa fa-trash-o m-r-5"></i> Delete</a>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 d-flex">
+                            <div class="card profile-box flex-fill">
+                                <div class="card-body">
+                                    <h3 class="card-title">Education Informations <a href="#" class="edit-icon"
+                                            data-bs-toggle="modal" data-bs-target="#education_info"><i
+                                                class="fa fa-pencil"></i></a></h3>
+                                    <div class="experience-box">
+                                        <ul class="experience-list">
+                                            <li>
+                                                <div class="experience-user">
+                                                    <div class="before-circle"></div>
+                                                </div>
+                                                <div class="experience-content">
+                                                    <div class="timeline-content">
+                                                        <a href="#/" class="name">International College of Arts and
+                                                            Science
+                                                            (UG)</a>
+                                                        <div>Bsc Computer Science</div>
+                                                        <span class="time">2000 - 2003</span>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="experience-user">
+                                                    <div class="before-circle"></div>
+                                                </div>
+                                                <div class="experience-content">
+                                                    <div class="timeline-content">
+                                                        <a href="#/" class="name">International College of Arts and
+                                                            Science
+                                                            (PG)</a>
+                                                        <div>Msc Computer Science</div>
+                                                        <span class="time">2000 - 2003</span>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 d-flex">
+                            <div class="card profile-box flex-fill">
+                                <div class="card-body">
+                                    <h3 class="card-title">Experience <a href="#" class="edit-icon"
+                                            data-bs-toggle="modal" data-bs-target="#experience_info"><i
+                                                class="fa fa-pencil"></i></a></h3>
+                                    <div class="experience-box">
+                                        <ul class="experience-list">
+                                            <li>
+                                                <div class="experience-user">
+                                                    <div class="before-circle"></div>
+                                                </div>
+                                                <div class="experience-content">
+                                                    <div class="timeline-content">
+                                                        <a href="#/" class="name">Web Designer at Zen Corporation</a>
+                                                        <span class="time">Jan 2013 - Present (5 years 2 months)</span>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="experience-user">
+                                                    <div class="before-circle"></div>
+                                                </div>
+                                                <div class="experience-content">
+                                                    <div class="timeline-content">
+                                                        <a href="#/" class="name">Web Designer at Ron-tech</a>
+                                                        <span class="time">Jan 2013 - Present (5 years 2 months)</span>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="experience-user">
+                                                    <div class="before-circle"></div>
+                                                </div>
+                                                <div class="experience-content">
+                                                    <div class="timeline-content">
+                                                        <a href="#/" class="name">Web Designer at Dalt Technology</a>
+                                                        <span class="time">Jan 2013 - Present (5 years 2 months)</span>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="emp_projects">
+                    <div class="row">
+                        {% for project in projects %}
+                        <div class="col-lg-4 col-sm-6 col-md-4 col-xl-3">
+                            <div class="card">
+                                <div class="card-body">
+
+                                    <h4 class="project-title"><a href="project-view.html">{{project.name}}</a></h4>
+                                    <small class="block text-ellipsis m-b-15">
+                                        <span class="text-xs">1</span> <span class="text-muted">open tasks, </span>
+                                        <span class="text-xs">9</span> <span class="text-muted">tasks completed</span>
+                                    </small>
+                                    <p class="text-muted">{{project.project_info|slice:"200"}}
+                                    </p>
+                                    <div class="pro-deadline m-b-15">
+                                        <div class="sub-title">
+                                            Deadline:
+                                        </div>
+                                        <div class="text-muted">
+                                            {{project.deadline}}
+                                        </div>
+                                    </div>
+                                    <div class="project-members m-b-15">
+                                        <div>Project Leader :</div>
+                                        <ul class="team-members">
+                                            {% for project in project.team_leader.all %}
+                                            <li>
+                                                <a href="#" data-bs-toggle="tooltip" title=""
+                                                    data-bs-original-title="Jeffery Lalor"
+                                                    aria-label="Jeffery Lalor"><img alt=""
+                                                        src="{{project.profile_img.url}}"></a>
+                                            </li>
+                                            {% empty %}
+                                            <li>No projects found for this employee.</li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                    <div class="project-members m-b-15">
+                                        <div>Team :</div>
+                                        <ul class="team-members">
+                                            {% for member in project.team_members.all %}
+                                            <li>
+                                                <a href="{% url 'employeedetails' member.id %}" data-bs-toggle="tooltip"
+                                                    title="" data-bs-original-title="John Doe"
+                                                    aria-label="John Doe"><img alt=""
+                                                        src="{{member.profile_img.url}}"></a>
+                                            </li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                    <p class="m-b-5">Progress <span class="text-success float-end">40%</span></p>
+                                    <div class="progress progress-xs mb-0">
+                                        <div style="width: 40%" title="" data-bs-toggle="tooltip" role="progressbar"
+                                            class="progress-bar bg-success" data-original-title="40%"
+                                            data-bs-original-title="">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% empty %}
+                        <li>No projects found for this employee.</li>
+                        {% endfor %}
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="modal custom-modal fade show" id="exampleModal" tabindex="-1" role="dialog"
+                aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document" style="max-width: 600px;">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            {% if info_form.instance.pk %}
+                            <h5 class="modal-title">Edit Personal Info</h5>
+                            {% else %}
+                            <h5 class="modal-title">Add Personal Info</h5>
+                            {% endif %}
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form method="post" class="ds-flex">
+                                {% csrf_token %}
+                                {{ info_form.as_p }}
+                                <button type="submit" class="btn btn-secondary" name="personalinfo">Submit</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal custom-modal fade show" id="exampleModal1" tabindex="-1" role="dialog"
+                aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document" style="max-width: 600px;">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            {% if bank_info.instance.pk %}
+                            <h5 class="modal-title">Edit Bank Info</h5>
+                            {% else %}
+                            <h5 class="modal-title">Add Bank Info</h5>
+                            {% endif %}
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form method="post" class="ds-flex">
+                                {% csrf_token %}
+                                {{ bank_info.as_p }}
+                                <button type="submit" class="btn btn-secondary" name="bankinfo">Submit</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal custom-modal fade show" id="exampleModal2" tabindex="-1" role="dialog"
+                aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document" style="max-width: 600px;">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Edit Employee Details</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form method="post" enctype="multipart/form-data" class="ds-flex">
+                                {% csrf_token %}
+                                {{ emp_infor.as_p }}
+                                <button type="submit" class="btn btn-secondary" name="editempinfo">Submit</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

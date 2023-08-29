@@ -1,0 +1,161 @@
+{% extends 'base/core.html' %}
+
+{% load static %}
+
+{% block title %} Employee Details {% endblock title %}
+
+
+{% block bodyclass %} page-id-leaves {% endblock bodyclass %}
+
+{% block content %}
+<div class="row">
+    <div class="col-2 col4">
+        {% include 'sidebar_partials.html'%}
+    </div>
+    <div class="col-10 col8">
+        <div class="container-fluid page-content">
+
+            <div class="page-header mb-4">
+                <div class="row">
+                    <div class="col-8">
+                        <h3 class="page-title">Leaves</h3>
+                        <ul class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{% url 'index' %}">Dashboard</a></li>
+                            <li class="breadcrumb-item active">Add Leaves</li>
+                        </ul>
+                    </div>
+                    <div class="col-4">
+                        <button type="button" class="btn btn-primary add-btn" data-toggle="modal"
+                            data-target="#exampleModal">
+                            <i class="fa fa-plus"></i>Leave</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="stats-info">
+                        <h6>Today Presents</h6>
+                        <h4>{{employees.count}} - {{leaves.count}}</h4>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stats-info">
+                        <h6>Planned Leaves</h6>
+                        <h4>0</h4>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stats-info">
+                        <h6>New Leave Requests</h6>
+                        <h4>{{new_leaves}}</h4>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stats-info">
+                        <h6>Pending Requests</h6>
+                        <h4>{{pending_count}}</h4>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="table-responsive">
+                        <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <table class="table table-striped custom-table mb-0 datatable dataTable no-footer"
+                                        id="DataTables_Table_0" role="grid" aria-describedby="DataTables_Table_0_info">
+                                        <thead>
+                                            <tr role="row">
+                                                <th class="sorting_asc" rowspan="1" colspan="1"
+                                                    style="width: 269.406px;">
+                                                    Employee</th>
+                                                <th class="sorting" rowspan="1" colspan="1" style="width: 107.625px;">
+                                                    Leave Type
+                                                </th>
+                                                <th class="sorting" rowspan="1" colspan="1" style="width: 78.375px;">
+                                                    From</th>
+                                                <th class="sorting" rowspan="1" colspan="1" style="width: 77.5px;">To
+                                                </th>
+                                                <th class="sorting" rowspan="1" colspan="1" style="width: 76.4219px;">No
+                                                    of Days
+                                                </th>
+                                                <th class="sorting" rowspan="1" colspan="1" style="width: 116.391px;">
+                                                    Reason
+                                                </th>
+                                                <th class="text-center sorting" rowspan="1" colspan="1"
+                                                    style="width: 108.359px;">Status</th>
+                                                <th class="text-end sorting" rowspan="1" colspan="1"
+                                                    style="width: 54.125px;">
+                                                    Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for leave in leaves %}
+                                            <tr class="odd">
+                                                <td class="sorting_1">
+                                                    <h2 class="table-avatar">
+                                                        <a href="{% url 'employeedetails' leave.employee.id %}"
+                                                            class="avatar"><img alt=""
+                                                                src="{{leave.employee.profile_img.url}}"></a>
+                                                        <a href="{% url 'employeedetails' leave.employee.id %}">{{leave.employee.full_name}}
+                                                            <span>-
+                                                                {{leave.employee.position}}</span></a>
+                                                    </h2>
+                                                </td>
+                                                <td>{{leave.leave_type}}</td>
+                                                <td>{{leave.start}}</td>
+                                                <td>{{ leave.end |default:'-'}}</td>
+                                                <td>
+                                                    {{leave.number_of_days}} Day{% if leave.number_of_days != 1 %}s{% endif %}
+                                                </td>
+                                                <td>{{leave.leave_reason}}</td>
+                                                <td>{{leave.status}}</td>
+                                                <td class="text-end">
+                                                    <a href="{% url 'delete_object' model_name='Leave' id=leave.id redirect_url_name='leaves' %}">Delete</a>
+                                                    <a href="{% url 'admin_edit_leave' leave.id %}">Edit</a>
+                                                </td>
+                                            </tr>
+                                            {% empty %}
+                                            <div class="dataTables_info mt-5" style="text-align: center;">
+                                                No leave record found
+                                            </div>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- create leave Modal -->
+            <div class="modal custom-modal fade show" id="exampleModal" tabindex="-1" role="dialog"
+                aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Add Leave</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form method="post">
+                                {% csrf_token %}
+                                {{ form.as_p }}
+                                <button type="submit" class="btn btn-secondary" name="create">Submit</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

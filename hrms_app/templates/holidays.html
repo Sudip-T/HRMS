@@ -1,0 +1,113 @@
+{% extends 'base/core.html' %}
+{% load tz %}
+
+{% load static %}
+
+{% block title %} Home {% endblock title %}
+
+
+{% block bodyclass %} page-id-001 {% endblock bodyclass %}
+
+
+{% block content %}
+
+<div class="row">
+    <div class="col-2 col4">
+        {% include 'sidebar_partials.html'%}
+    </div>
+    <div class="col-10 col8">
+        <div class="content container-fluid page-content">
+
+            <div class="page-header mb-4">
+                <div class="row align-items-center">
+                    <div class="col">
+                        <h3 class="page-title">Holidays</h3>
+                        <ul class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="">Dashboard</a></li>
+                            <li class="breadcrumb-item active">Holidays</li>
+                        </ul>
+                    </div>
+                    <div class="col-4">
+                        <button type="button" class="btn btn-primary add-btn" data-toggle="modal"
+                            data-target="#exampleModal">
+                            <i class="fa fa-plus"></i>Holiday</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="table-responsive">
+
+                        <table class="table table-striped custom-table mb-0">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Title </th>
+                                    <th>Holiday Date</th>
+                                    <th>Day</th>
+                                    <th class="text-end">Action</th>
+                                </tr>
+                            </thead>
+                            {% if holidays %}
+                            <tbody>
+                                {% for holiday in holidays %}
+                                <tr class="holiday-upcoming">
+                                    <td>{{ forloop.counter }}</td>
+                                    <td>{{holiday.title}}</td>
+                                    <td>{{ holiday.start_date|date:"j M Y" }}
+                                        {% if holiday.end_date %}
+                                        - {{ holiday.end_date|date:"j M Y" }}
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ holiday.start_date|date:"l" }}
+                                        {% if holiday.end_date %}
+                                        - {{ holiday.end_date|date:"l" }}
+                                        {% endif %}
+                                    </td>
+                                    {% if not holiday.is_passed %}
+                                    <td class="text-end">
+                                        <a
+                                            href="{% url 'delete_object' model_name='Holiday' id=holiday.id redirect_url_name='holidays' %}">Delete</a>
+                                            <a href="{% url 'edit_holiday' holiday.id %}" >Edit</a>
+                                    </td>
+                                    {% else %}
+                                    <td></td>
+                                    {% endif %}
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                            {% else %}
+                            <div>No data found</div>
+                            {% endif %}
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+            <div class="modal custom-modal fade show" id="exampleModal" tabindex="-1" role="dialog"
+                aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Add Holiday</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form method="post">
+                                {% csrf_token %}
+                                {{ form.as_p }}
+                                <button type="submit" class="btn btn-secondary" name="create">Submit</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock content %}

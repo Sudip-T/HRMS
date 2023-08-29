@@ -1,0 +1,38 @@
+<div class="sidebar" id="sidebar">
+    <div id="sidebar-menu" class="sidebar-menu">
+        {% if request.user.is_authenticated and request.user.is_superuser %}
+        <ul class="sidebar-vertical">
+            <li class="submenu">
+                <a href="/" class=""><span> Dashboard</span></a>
+                <ul style="display: block;">
+                    <li><a href="{% url 'index' %}">Admin Dashboard</a></li>
+                    <li><a href="{% url 'empdashboard' %}">Employee Dashboard</a></li>
+                </ul>
+            </li>
+            <li class="submenu">
+                <a href="#" class=""><span> Employees</span></a>
+                <ul style="display: block;">
+                    <li><a href="{% url 'allemployees' %}">All Employees</a></li>
+                    <li><a href="{% url 'leaves' %}">Leaves(Admin)</a></li>
+                    <li><a href="{% url 'departments' %}">Department</a></li>
+                    <li><a href="{% url 'holidays' %}">Holidays</a></li>
+                </ul>
+            </li>
+            <li class="submenu"><a href="{% url 'allclients' %}"> Clients</a></li>
+            <li class="submenu"><a href="{% url 'allprojects' %}"> All Projects</a></li>
+            <li class="submenu"><a href="{% url 'client_invoices' %}"> Client Invoice</a></li>
+            <li class="submenu"><a href="{% url 'client_payments' %}">Client Payment</a></li>
+            
+        </ul>
+        {% else %}
+        <ul class="sidebar-vertical">
+            <li class="submenu">
+                <a href="#" class=""><span> Dashboard</span></a>
+                <ul style="display: block;">
+                    <li><a href="{% url 'empdashboard' %}">Employee Dashboard</a></li>
+                </ul>
+            </li>            
+        </ul>
+        {% endif %}
+    </div>
+</div>

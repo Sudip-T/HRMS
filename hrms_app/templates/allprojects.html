@@ -1,0 +1,133 @@
+{% extends 'base/core.html' %}
+
+{% load static %}
+
+{% block title %} Projects {% endblock title %}
+
+
+{% block bodyclass %} page-id-allemployees {% endblock bodyclass %}
+
+{% block content %}
+<div class="row">
+    <div class="col-2 col4">
+        {% include 'sidebar_partials.html'%}
+    </div>
+    <div class="col-10 col8">
+        <div class="container-fluid page-content">
+            <div class="page-header mb-4">
+                <div class="row">
+                    <div class="col-8">
+                        <h3 class="page-title">Projects</h3>
+                        <ul class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{% url 'index' %}">Dashboard</a></li>
+                            <li class="breadcrumb-item active">Projects</li>
+                        </ul>
+                    </div>
+                    <div class="col-4">
+                        <button type="button" class="btn btn-primary add-btn" data-toggle="modal"
+                            data-target="#exampleModal">
+                            <i class="fa fa-plus"></i>Project</button>
+                    </div>
+                </div>
+            </div>
+            <form method="GET" class="row staff-grid-row" id="myForm">
+                {% csrf_token %}
+                <div class="col-sm-6 col-md-3">
+                    <div class="form-group">
+                        {{ form.name }}
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-3">
+                    <div class="form-group form-g">
+                        {{ form.team_members }}
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-3">
+                    <div class="form-group">
+                        {{ form.client }}
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-3">
+                    <div class="d-grid">
+                        <input type="submit" name="Search" class="btn btn-success w-100" id="submitBtn">
+                    </div>
+                </div>
+            </form>
+            <div class="row">
+                {% for project in projects %}
+                <div class="col-lg-4 col-sm-6 col-md-4 col-xl-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="project-title"><a
+                                    href="{% url 'projectdetails' project.id %}">{{project.name}}</a></h4>
+                            <p class="text-muted">{{project.project_info|slice:"400"}}
+                            </p>
+                            <div class="pro-deadline m-b-15">
+                                <div class="sub-title">
+                                    Deadline:
+                                </div>
+                                <div class="text-muted">
+                                    {{project.deadline}}
+                                </div>
+                            </div>
+                            <div class="project-members m-b-15">
+                                <div>Project Leader</div>
+                                <ul class="team-members">
+                                    {% for project in project.team_leader.all %}
+                                    <li>
+                                        <a href="{% url 'employeedetails' project.id %}" data-bs-toggle="tooltip" title=""
+                                            data-bs-original-title="Jeffery Lalor" aria-label="Jeffery Lalor"><img
+                                                alt="" src="{{project.profile_img.url}}"></a>
+                                    </li>
+                                    {% empty %}
+                                    <li>No projects found for this employee.</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                            <div class="project-members m-b-15">
+                                <div>Team Members</div>
+                                <ul class="team-members">
+                                    {% for member in project.team_members.all %}
+                                    <li>
+                                        <a href="{% url 'employeedetails' member.id %}" data-bs-toggle="tooltip"
+                                            title="" data-bs-original-title="John Doe" aria-label="John Doe"><img alt=""
+                                                src="{{member.profile_img.url}}"></a>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <li>No projects found</li>
+                {% endfor %}
+            </div>
+
+            <div class="modal custom-modal fade show" id="exampleModal" tabindex="-1" role="dialog"
+                aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document" style="max-width: 600px;">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Add Payment</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form method="post" enctype="multipart/form-data" class="ds-flex">
+                                {% csrf_token %}
+                                {{ add_form.as_p }}
+                                <button type="submit" class="btn btn-secondary" name="createemployee">Submit</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+{% endblock content %}

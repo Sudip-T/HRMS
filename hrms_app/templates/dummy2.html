@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            display: flex !important;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: sans-serif;
+            font-size: 16px;
+            font-family: 'Source Sans Pro', sans-serif;
+            background: #cdcdcd;
+            background-repeat: no-repeat;
+            background-size: contain;
+            background-position: 20% 38% !important;
+        }
+
+        p {
+            color: #8495a5;
+        }
+
+        .login-form {
+            width: 389px;
+            height: auto;
+            background: transparent;
+            border-radius: 8px;
+            padding: 30px 20px;
+            box-shadow: 0px 0px 4px rgb(54 94 159);
+        }
+
+        .cb-form-group {
+            background: transparent;
+        }
+
+        .cb-form-group label {
+            display: block;
+            margin-bottom: 10px;
+            color: var(--skyblue);
+
+        }
+
+        .cb-form-group input {
+            line-height: 42px;
+            padding: 0 16px;
+            width: 100%;
+            border: none;
+            box-shadow: 0px 0px 2px rgb(54 94 159);
+            border-radius: 4px;
+            font-size: 15px;
+            outline: none;
+            color: var(--skyblue);
+            margin-bottom: 15px;
+        }
+
+        .cb-form-group input::placeholder {
+            color: var(--skyblue);
+        }
+
+        .cb-form-group button {
+            line-height: 42px;
+            padding: 0 16px;
+            width: 100%;
+            border: none;
+            border-radius: 4px;
+            font-size: 15px;
+            outline: none;
+            cursor: pointer;
+            box-shadow: none;
+            margin-top: 25px;
+        }
+    </style>
+</head>
+
+<body>
+    <sectio class="cb-auth-form">
+        <div class="login-form">
+            <div>
+                {% for message in messages %}
+                <p style="color: #0ab1b1;text-align: center;">{{message}}</p>
+                {% endfor %}
+            </div>
+            <div class="social-login">
+                <div class="block-social-login">
+                    <div class="block-social" style="padding-bottom: 30px;
+                    text-align: center;">
+                        HRMS Login
+                    </div>
+                </div>
+            </div>
+            <div class="cb-form-group">
+                <form action="" method="POST">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Username" style="max-width: 92%;">
+                    </div>
+                    <div class="form-group">
+                        <input type="password" class="form-control" placeholder="Password" style="max-width: 92%;">
+                    </div>
+                    <button>Login</button>
+                </form>
+                <div class="block-signup" style="padding-top: 20px;text-align: center;">
+                    <span>Don't have an account? | Contact Adminstration</span>
+                </div>
+            </div>
+        </div>
+        </section>
+</body>
+
+</html>

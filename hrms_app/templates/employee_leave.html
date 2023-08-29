@@ -1,0 +1,25 @@
+{% extends 'base/core.html' %}
+
+{% load static %}
+
+{% block title %} Employee Details {% endblock title %}
+
+
+{% block bodyclass %} page-id-emp_leaves {% endblock bodyclass %}
+
+{% block content %}
+<div class="container-fluid page-content">
+
+    <div class="page-header mb-4">
+        <div class="row">
+            <div class="col-8">
+                <h3 class="page-title">Leaves</h3>
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'index' %}">Dashboard</a></li>
+                    <li class="breadcrumb-item active">Leave/s</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+</div>

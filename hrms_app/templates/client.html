@@ -1,0 +1,214 @@
+{% extends 'base/core.html' %}
+
+{% load static %}
+
+{% block title %} Home {% endblock title %}
+
+
+{% block bodyclass %} page-id-001 {% endblock bodyclass %}
+
+{% block content %}
+<div class="row">
+    <div class="col-2 col4">
+        {% include 'sidebar_partials.html'%}
+    </div>
+    <div class="col-10 col8">
+        <div class="content container-fluid page-content">
+
+            <div class="page-header mb-4">
+                <div class="row">
+                    <div class="col-8">
+                        <h3 class="page-title">Profile</h3>
+                        <ul class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{% url 'index' %}">Dashboard</a></li>
+                            <li class="breadcrumb-item"><a href="{% url 'allclients' %}">Clients</a></li>
+                            <li class="breadcrumb-item active">Client Profile</li>
+                        </ul>
+                    </div>
+                    <div class="col-4">
+                        <button type="button" class="btn btn-primary add-btn" data-toggle="modal"
+                            data-target="#exampleModal1">
+                            <i class="fa fa-plus"></i>Project</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-0">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="profile-view">
+                                <div class="profile-img-wrap">
+                                    <div class="profile-img">
+                                        <a href="">
+                                            {% if client.profile_img %}
+                                            <img alt="" src="{{client.profile_img.url}}">
+                                            {% else %}
+                                            <img alt="" src="{% static 'img/user.jpg' %}">
+                                            {% endif %}
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="profile-basic">
+                                    <div class="row">
+                                        <div class="col-md-5" style="margin-top: auto;margin-bottom: auto;">
+                                            <div class="profile-info-left">
+                                                <h3 class="user-name m-t-0">{{client.company}}</h3>
+                                                <h5 class="company-role m-t-0 mb-0">{{client.full_name}}</h5>
+                                                <small class="text-muted">{{client.position}}</small>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-7">
+                                            <ul class="personal-info">
+                                                <li>
+                                                    <span class="title">Phone:</span>
+                                                    <span class="text"><a href="">{{client.phone}}</a></span>
+                                                </li>
+                                                <li>
+                                                    <span class="title">Email:</span>
+                                                    <span class="text"><a href="">{{client.email}}</a></span>
+                                                </li>
+                                                <li>
+                                                    <span class="title">Address:</span>
+                                                    <span class="text">{{client.address}}</span>
+                                                </li>
+                                                <li>
+                                                    <span class="title">Gender:</span>
+                                                    <span class="text">{{client.gender}}</span>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="pro-edit"><a class="edit-icon" data-toggle="modal"
+                                        data-target="#exampleModal2"><i class="fa fa-pencil"></i></a></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card tab-box mt-3">
+                <div class="row user-tabs">
+                    <div class="col-lg-12 col-md-12 col-sm-12 line-tabs">
+                        <ul class="nav nav-tabs nav-tabs-bottom">
+                            <li class="nav-item col-sm-3"><a class="nav-link active" data-bs-toggle="tab"
+                                    href="#myprojects">Projects</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    {% if projects %}
+                    <div class="tab-content profile-tab-content">
+                        <div id="myprojects" class="tab-pane fade show active">
+                            <div class="row">
+                                {% for project in projects %}
+                                <div class="col-lg-4 col-sm-6 col-md-4 col-xl-3">
+                                    <div class="card">
+                                        <div class="card-body action-icons">
+                                            <h4 class="project-title"><a
+                                                    href="{% url 'projectdetails' project.id %}">{{project.name}}</a>
+                                            </h4>
+                                            <p class="text-muted">
+                                                {{project.project_info|slice:":100"|truncatechars:320}}...</p>
+                                            <div class="pro-deadline m-b-15">
+                                                <div class="sub-title">
+                                                    Deadline:
+                                                </div>
+                                                <div class="text-muted">
+                                                    {{project.deadline}}
+                                                </div>
+                                            </div>
+                                            <div class="project-members m-b-15">
+                                                <div>Project Leader :</div>
+                                                <ul class="team-members">
+                                                    {% for member in project.team_leader.all %}
+                                                    <li>
+                                                        <a href="{% url 'employeedetails' member.id %}"
+                                                            data-bs-toggle="tooltip" title=""
+                                                            data-bs-original-title="John Doe" aria-label="John Doe"><img
+                                                                alt="" src="{{member.profile_img.url}}"
+                                                                style="height: 100%;border-radius: 50%;"></a>
+                                                    </li>
+                                                    {% endfor %}
+                                                </ul>
+                                            </div>
+                                            <div class="project-members m-b-15">
+                                                <div>Team :</div>
+                                                <ul class="team-members">
+                                                    {% for member in project.team_members.all %}
+                                                    <li>
+                                                        <a href="{% url 'employeedetails' member.id %}"
+                                                            data-bs-toggle="tooltip" title=""
+                                                            data-bs-original-title="John Doe" aria-label="John Doe"><img
+                                                                alt="" src="{{member.profile_img.url}}"
+                                                                style="height: 100%;border-radius: 50%;"></a>
+                                                    </li>
+                                                    {% endfor %}
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    {% else %}
+                    <div class="mt-5 text-center" style="color: #ada7a7;font-size: 23px;">There is no Project</div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="modal custom-modal fade show" id="exampleModal2" tabindex="-1" role="dialog"
+                aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document" style="max-width: 600px;">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Edit client Details</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form method="post" enctype="multipart/form-data" class="ds-flex">
+                                {% csrf_token %}
+                                {{ form.as_p }}
+                                <button type="submit" class="btn btn-secondary" name="edit_client">Submit</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="modal custom-modal fade show" id="exampleModal1" tabindex="-1" role="dialog"
+                aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document" style="max-width: 600px;">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Add Project</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form method="post" enctype="multipart/form-data" class="ds-flex">
+                                {% csrf_token %}
+                                {{ add_project.as_p }}
+                                <button type="submit" class="btn btn-secondary" name="add_project">Submit</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+</div>
+
+
+{% endblock content %}
+Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minus dolorum voluptatum sunt nam commodi quibusdam libero repellendus exercitationem unde harum reiciendis accusantium nisi vitae sapiente eius mollitia, quod debitis. Ullam dolor aliquam quae iure alias 

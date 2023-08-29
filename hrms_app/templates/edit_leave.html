@@ -1,0 +1,43 @@
+{% extends 'base/core.html' %}
+
+{% load static %}
+
+{% block title %} Employee Details {% endblock title %}
+
+
+{% block bodyclass %} page-id-edit_leaves {% endblock bodyclass %}
+
+{% block content %}
+<div class="container-fluid page-content">
+
+    <div class="page-header mb-4">
+        <div class="row">
+            <div class="col-8">
+                <h3 class="page-title">Leaves</h3>
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'index' %}">Dashboard</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'leaves' %}">Leaves</a></li>
+                    <li class="breadcrumb-item active">Edit Leave</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="modal custom-modal fade show" style="display: block;position: unset;">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit Leave</h5>
+                </div>
+                <div class="modal-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <button type="submit" class="btn btn-secondary" name="create">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

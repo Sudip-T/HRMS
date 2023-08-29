@@ -1,0 +1,216 @@
+{% extends 'base/core.html' %}
+
+{% load static %}
+{% load tz %}
+
+{% block title %} Employee Details {% endblock title %}
+
+
+{% block bodyclass %} page-id-allemployees {% endblock bodyclass %}
+
+{% block content %}
+<div class="row">
+    <div class="col-2 col4">
+        {% include 'sidebar_partials.html'%}
+    </div>
+    <div class="col-10 col8">
+        <div class="container-fluid page-content">
+            <div class="page-header mb-4">
+                <div class="row" style="padding-left: 10px;">
+                    <div class="col-md-12">
+                        <div class="welcome-box">
+                            <div class="welcome-img">
+                                {% if request.user.employee %}
+                                {% if request.user.employee.profile_img %}
+                                <img src="{{ request.user.employee.profile_img.url }}" alt="User Image"
+                                    style="height: 70px;width: 70px;">
+                                    {% endif %}
+                                {% endif %}
+                            </div>
+                            <div class="welcome-det">
+                                <h3>Welcome, {{ request.user.employee.full_name }}</h3>
+                                <p><span id="current-time"></span></p>
+                            </div>
+                            {% if messages %}
+                            <div class="messages" style="margin-left: auto;">
+                                {% for message in messages %}
+                                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                                    {{ message }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                        aria-label="Close"></button>
+                                </div>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-8 col-md-8">
+                        <section class="dash-section">
+                            <h1 class="dash-sec-title" style="font-size: 13px;">Your Project/s List</h1>
+                            <div class="dash-sec-content">
+                                {% for project in projects %}
+                                <div class="dash-info-list">
+                                    <a href="{% url 'projectdetails' project.id%}" class="dash-card text-danger">
+                                        <div class="dash-card-container">
+                                            <div class="dash-card-icon">
+                                                <i class="fa-regular fa-hourglass"></i>
+                                            </div>
+                                            <div class="dash-card-content">
+                                                <p>{{project.name}}</p>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </section>
+                    </div>
+                    <div class="col-lg-4 col-md-4">
+                        <div class="dash-sidebar">
+                            <section>
+                                <h5 class="dash-title">Your Leave</h5>
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="time-list">
+                                            <div class="dash-stats-list">
+                                                <h4>{{taken_leave}}</h4>
+                                                <p>Leave Taken</p>
+                                            </div>
+                                            <div class="dash-stats-list">
+                                                <h4>{{request.user.employee.total_leave_days}}</h4>
+                                                <p>Remaining</p>
+                                            </div>
+                                        </div>
+                                        <div class="request-btn">
+                                            <a class="btn btn-primary" href="#" data-toggle="modal"
+                                                data-target="#exampleModal">Apply Leave</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                            <section>
+                                <h5 class="dash-title">Upcoming Holiday</h5>
+                                <div class="card">
+                                    {% if holiday %}
+                                    <div class="card-body text-center">
+                                        <h4 class="holiday-title mb-0">{{holiday.start_date}}
+                                            {% if holiday.end_date %}
+                                            - {{ holiday.end_date}}
+                                            {% endif %}
+                                        </h4>
+                                        <h4 class="holiday-title mb-0">{{holiday.title}}</h4>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="row user-tabs">
+                    <div class="col-lg-12 col-md-12 col-sm-12 line-tabs">
+                        <ul class="nav nav-tabs nav-tabs-bottom">
+                            <li class="nav-item col-sm-3 mb-2 mt-2">Leave History</li>
+                        </ul>
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <div class="col-sm-12">
+                        <table
+                            class="table table-striped custom-table leave-employee-table mb-0 datatable dataTable no-footer">
+                            <thead>
+                                <tr role="row">
+                                    <th colspan="1">Leave Type</th>
+                                    <th colspan="1">From</th>
+                                    <th colspan="1">To</th>
+                                    <th colspan="1">No of Days</th>
+                                    <th colspan="1">Reason</th>
+                                    <th colspan="1">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for leave in leave_obj %}
+                                <tr class="odd">
+                                    <td class="sorting_1">{{leave.leave_type}}</td>
+                                    <td>{{ leave.start }}</td>
+                                    <td>{{ leave.end }}</td>
+                                    <td>{{leave.number_of_days}} Day{% if leave.number_of_days != 1 %}s{% endif %}</td>
+                                    <td>{{leave.leave_reason}}</td>
+                                    <td>{{leave.status}}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- create leave Modal -->
+            <div class="modal custom-modal fade show" id="exampleModal" tabindex="-1" role="dialog"
+                aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Add Leave</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form method="post">
+                                {% csrf_token %}
+                                {{ form.as_p }}
+                                <button type="submit" class="btn btn-secondary" name="create">Submit</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
+
+
+{% block javascript %}
+<script>
+    $(document).ready(function () {
+        $(".datepicker").datepicker({
+            minDate: 0,
+        });
+    });
+</script>
+
+<script>
+    $(function () {
+        function updateTime() {
+            const now = new Date();
+
+            const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+            const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+            const day = days[now.getDay()];
+            const date = now.getDate();
+            const month = months[now.getMonth()];
+            const year = now.getFullYear();
+            const time = now.toLocaleTimeString('en-GB', { hour12: false });
+
+            const formattedDateTime = `${day}, ${date} ${month} ${year} ${time}`;
+
+            $('#current-time').text(formattedDateTime);
+        }
+
+        updateTime();  // Call updateTime immediately to set the current time as soon as the page loads.
+        setInterval(updateTime, 1000);  // Then call updateTime every second to keep the time updated.
+    });
+</script>
+
+{% endblock %}

@@ -1,0 +1,64 @@
+{% extends 'base/core.html' %}
+
+{% load static %}
+
+{% block title %} Edit {% endblock title %}
+
+
+{% block bodyclass %} page-id-allemployees {% endblock bodyclass %}
+
+{% block content %}
+<div class="row">
+    <div class="col-2 col4">
+        {% include 'sidebar_partials.html'%}
+    </div>
+    <div class="col-10 col8">
+        <div class="container-fluid page-content">
+            <div class="page-header mb-4">
+                <div class="row">
+                    <div class="col-8">
+                        <h3 class="page-title"><a href="{% url go_back %}">
+                            <img src="{% static 'img/arrow.png' %}" alt="" style="width: 45px;
+                            padding-right: 15px;">
+                        </a>Edit Data</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="row staff-grid-row">
+                <div class="col-md-12">
+                    <div class="table-responsive">
+                        <div class="modal-dialog" role="document" style="max-width: 600px;">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Add Payment</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <form method="post" enctype="multipart/form-data" class="ds-flex">
+                                        {% csrf_token %}
+                                        {{ form.as_p }}
+                                        <button type="submit" class="btn btn-secondary" name="createemployee">Submit</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock content %}
+
+{% block javascript %}
+
+<script>
+    $(document).ready(function () {
+        $(".datepicker").datepicker();
+    });
+</script>
+
+{% endblock %}

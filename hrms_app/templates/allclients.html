@@ -1,0 +1,114 @@
+{% extends 'base/core.html' %}
+
+{% load static %}
+
+{% block title %} Employee Details {% endblock title %}
+
+
+{% block bodyclass %} page-id-allemployees {% endblock bodyclass %}
+
+{% block content %}
+<div class="row">
+    <div class="col-2 col4">
+        {% include 'sidebar_partials.html'%}
+    </div>
+    <div class="col-10 col8">
+        <div class="container-fluid page-content">
+            <div class="page-header mb-4">
+                <div class="row">
+                    <div class="col-8">
+                        <h3 class="page-title">Clients</h3>
+                        <ul class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{% url 'index' %}">Dashboard</a></li>
+                            <li class="breadcrumb-item active">Clients</li>
+                        </ul>
+                    </div>
+                    <div class="col-4">
+                        <button type="button" class="btn btn-primary add-btn" data-toggle="modal"
+                            data-target="#exampleModal">
+                            <i class="fa fa-plus"></i>Client</button>
+                    </div>
+                </div>
+            </div>
+                <form method="GET" class="row staff-grid-row" id="myForm">
+                    {% csrf_token %}
+                    <div class="col-sm-6 col-md-3">
+                        <div class="form-group">
+                            <input type="text" class="form-control floating" placeholder="Client ID" name="data_id">
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-3">
+                        <div class="form-group">
+                            <input type="text" class="form-control floating" placeholder="Client Name" name="data_name">
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-3">
+                        <div class="form-group">
+                            <select class="form-control" id="exampleFormControlSelect1" name="data_more">
+                                <option disabled selected>Select Company</option>
+                                {% for item in clients %}
+                                <option value="{{ item }}">{{item}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-3">
+                        <div class="d-grid">
+                            <input type="submit" id="submitBtn" name="Search_clients" class="btn btn-success w-100" disabled>
+                        </div>
+                    </div>
+                </form>
+            <div class="row staff-grid-row">
+                {% for employee in clients %}
+                <div class="col-md-4 col-sm-6 col-12 col-lg-4 col-xl-3">
+                    <div class="profile-widget">
+                        <div class="profile-img">
+                            <a href="{% url 'client' employee.company  %}" class="avatar">
+                                {% if employee.profile_img %}
+                                <img alt="" src="{{employee.profile_img.url}}">
+                                {% else %}
+                                <img alt="" src="{% static 'img/user.jpg' %}">
+                                {% endif %}
+                            </a>
+                        </div>
+                        <h4 class="user-name m-t-10 mb-0 text-ellipsis"><a
+                                href="{% url 'client' employee.company %}">{{employee.company}}</a>
+                        </h4>
+                        <h5 class="user-name m-t-10 mb-0 text-ellipsis"><a
+                                href="{% url 'client' employee.company %}">{{employee.full_name}}</a></h5>
+                        <div class="small text-muted">{{employee.position}}</div>
+                        <a href="chat.html" class="btn btn-white btn-sm m-t-10">Message</a>
+                        <a href="{% url 'client' employee.company %}" class="btn btn-white btn-sm m-t-10">View
+                            Profile</a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="modal custom-modal fade show" id="exampleModal" tabindex="-1" role="dialog"
+                aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document" style="max-width: 600px;">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Add Client</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form method="post" enctype="multipart/form-data" class="ds-flex">
+                                {% csrf_token %}
+                                {{ form.as_p }}
+                                <button type="submit" class="btn btn-secondary" name="createemployee">Submit</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+
+{% endblock content %}
